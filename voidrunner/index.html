@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOIDRUNNER</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+
+        <div id="hud">
+            <div>VOIDRUNNER</div>
+            <div>VELOCIDAD: <span id="speed">100</span>%</div>
+            <div>DISTANCIA: <span id="distance">0</span></div>
+        </div>
+
+        <div id="game-over" class="hidden">
+            <h1>GAME OVER</h1>
+            <p>Distancia: <span id="final-distance">0</span></p>
+            <button id="restart">REINTENTAR</button>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
