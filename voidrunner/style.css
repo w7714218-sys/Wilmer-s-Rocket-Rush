@@ -5,169 +5,133 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #000;
-    color: #fff;
     overflow: hidden;
-    width: 100vw;
-    height: 100vh;
+    background: #d8d8d8;
+    font-family: Arial, sans-serif;
 }
 
 #game-container {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
 }
 
 #game-canvas {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
+    display: block;
 }
 
-.screen {
+#hud {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 25px;
+    left: 30px;
+    z-index: 10;
+
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.8;
+
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+#hud .title {
+    font-size: 28px;
+    letter-spacing: 5px;
+    margin-bottom: 10px;
+}
+
+#game-over {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: rgba(169, 158, 158, 0.8);
+    gap: 20px;
+
+    background: rgba(220, 220, 220, 0.8);
+    color: #333;
 }
 
-.screen.hidden {
+#game-over.hidden {
     display: none;
 }
 
-h1 {
-    font-size: 3rem;
-    color: #00ffff;
-    margin-bottom: 30px;
-    text-shadow: 0 0 10px #00ffff;
+#game-over h1 {
+    font-size: 48px;
+    letter-spacing: 5px;
 }
 
-h2 {
-    font-size: 2rem;
-    color: #00ffff;
-    margin-bottom: 20px;
+#game-over p {
+    font-size: 20px;
 }
 
-.menu-buttons {
+#main-menu {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    background: rgba(220, 220, 220, 0.5);
+    color: #333;
+}
+
+#main-menu.hidden {
+    display: none;
+}
+
+#main-menu h1 {
+    font-size: 64px;
+    letter-spacing: 8px;
+    color: #333;
+}
+
+#main-menu p {
+    font-size: 24px;
+    color: #555;
+}
+
+#main-menu p:nth-of-type(2) {
+    color: #a56b00;
+    font-weight: bold;
+}
+
+#play-btn {
+    padding: 20px 60px;
+    font-size: 24px;
+    background: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    letter-spacing: 3px;
+}
+
+#play-btn:hover {
+    background: #0088ff;
 }
 
 button {
-    padding: 15px 40px;
-    font-size: 1.2rem;
-    background: #0066cc;
-    border: 2px solid #00ffff;
-    color: #fff;
-    border-radius: 5px;
+    padding: 14px 30px;
+    border: 2px solid #555;
+    background: white;
+    color: #333;
+    font-size: 16px;
     cursor: pointer;
-    transition: all 0.3s;
 }
 
 button:hover {
-    background: #0088ff;
-    transform: scale(1.05);
-}
-
-.stats {
-    margin-top: 30px;
-    font-size: 1.2rem;
-    color: #00ffff;
-}
-
-.setting {
-    margin: 20px 0;
-    text-align: center;
-}
-
-.setting label {
-    display: block;
-    margin-bottom: 10px;
-}
-
-input[type="range"] {
-    width: 200px;
-}
-
-.back-btn {
-    margin-top: 20px;
-    background: #eae2e2;
-    border-color: #666;
-}
-
-.hud-info {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 1.2rem;
-    color: #a89898;
-}
-
-.score-display {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.multiplier {
-    font-size: 1rem;
-    color: #ffcc00;
-    margin-left: 10px;
-}
-
-.challenge {
-    font-size: 1rem;
-    color: #aaaaaa;
-    margin-bottom: 5px;
-}
-
-.speed {
-    font-size: 0.9rem;
-    color: #888888;
-}
-
-.abilities {
-    position: absolute;
-    top: 20px;
-    right: 80px;
-    display: flex;
-    gap: 10px;
-}
-
-.ability {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.4);
-}
-
-#btn-pause {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
-}
-
-.final-score {
-    font-size: 1.5rem;
-    color: #00ffff;
-    margin: 20px 0;
-}
-
-#pause-menu button,
-#game-over button {
-    margin: 10px;
-    width: 200px;
+    background: #eeeeee;
 }

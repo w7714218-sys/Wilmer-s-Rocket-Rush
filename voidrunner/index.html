@@ -11,16 +11,28 @@
     <div id="game-container">
         <canvas id="game-canvas"></canvas>
 
-        <div id="hud">
-            <div>VOIDRUNNER</div>
-            <div>VELOCIDAD: <span id="speed">100</span>%</div>
-            <div>DISTANCIA: <span id="distance">0</span></div>
+        <!-- Menú Principal / Hangar -->
+        <div id="main-menu">
+            <h1>VOIDRUNNER</h1>
+            <p>Hangar Espacial</p>
+            <p>MONEDAS: <span id="hangar-coins">0</span></p>
+            <button id="play-btn">JUGAR</button>
         </div>
 
+        <!-- HUD durante el juego -->
+        <div id="hud" class="hidden">
+            <div class="title">VOIDRUNNER</div>
+            <div>VELOCIDAD: <span id="speed">100</span>%</div>
+            <div>DISTANCIA: <span id="distance">0</span></div>
+            <div>MONEDAS: <span id="coins">0</span></div>
+        </div>
+
+        <!-- Game Over -->
         <div id="game-over" class="hidden">
             <h1>GAME OVER</h1>
+            <p>Has chocado con un obstáculo</p>
             <p>Distancia: <span id="final-distance">0</span></p>
-            <button id="restart">REINTENTAR</button>
+            <button id="restart">VOLVER AL HANGAR</button>
         </div>
     </div>
 
