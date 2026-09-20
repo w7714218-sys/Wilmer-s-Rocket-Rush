@@ -4,9 +4,7 @@
 
 import * as THREE from 'three';
 
-// ========================================
 // ESCENA
-// ========================================
 
 const canvas = document.getElementById('game-canvas');
 
@@ -20,9 +18,8 @@ scene.fog = new THREE.Fog(
     300
 );
 
-// ========================================
 // CÁMARA
-// ========================================
+
 
 const camera = new THREE.PerspectiveCamera(
     65,
@@ -33,9 +30,7 @@ const camera = new THREE.PerspectiveCamera(
 
 camera.position.set(0, 5, 12);
 
-// ========================================
 // RENDERER
-// ========================================
 
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
@@ -51,9 +46,7 @@ renderer.setPixelRatio(
     Math.min(window.devicePixelRatio, 2)
 );
 
-// ========================================
 // LUCES
-// ========================================
 
 const ambientLight = new THREE.AmbientLight(
     0xffffff,
@@ -78,9 +71,7 @@ const hemisphereLight = new THREE.HemisphereLight(
 
 scene.add(hemisphereLight);
 
-// ========================================
 // ESTADO
-// ========================================
 
 let gameRunning = true;
 let gameState = 'menu';
@@ -105,15 +96,12 @@ const keys = {
 
 const clock = new THREE.Clock();
 
-// ========================================
 // COHETE
-// ========================================
 
 const ship = new THREE.Group();
 
-// ========================================
 // CUERPO DEL COHETE
-// ========================================
+
 
 const bodyGeometry = new THREE.LatheGeometry(
     [
@@ -143,9 +131,7 @@ body.rotation.x = Math.PI / 2;
 
 ship.add(body);
 
-// ========================================
 // PUNTA DEL COHETE
-// ========================================
 
 const nose = new THREE.Mesh(
     new THREE.ConeGeometry(
@@ -165,9 +151,7 @@ nose.position.z = -1.50;
 
 ship.add(nose);
 
-// ========================================
 // VENTANA
-// ========================================
 
 const windowFrame = new THREE.Mesh(
     new THREE.TorusGeometry(
@@ -193,9 +177,7 @@ windowFrame.position.set(
 
 ship.add(windowFrame);
 
-// ========================================
 // CRISTAL
-// ========================================
 
 const windowGlass = new THREE.Mesh(
     new THREE.SphereGeometry(
@@ -226,9 +208,7 @@ windowGlass.position.set(
 
 ship.add(windowGlass);
 
-// ========================================
 // TURBINA
-// ========================================
 
 const turbine = new THREE.Mesh(
     new THREE.CylinderGeometry(
@@ -249,9 +229,9 @@ turbine.position.z = 1.18;
 
 ship.add(turbine);
 
-// ========================================
+
 // ANILLO DE TURBINA
-// ========================================
+
 
 const turbineRing = new THREE.Mesh(
     new THREE.TorusGeometry(
@@ -271,9 +251,7 @@ turbineRing.position.z = 1.37;
 
 ship.add(turbineRing);
 
-// ========================================
 // LLAMA EXTERIOR
-// ========================================
 
 const flameOuter = new THREE.Mesh(
     new THREE.ConeGeometry(
@@ -295,9 +273,8 @@ flameOuter.position.z = 2.08;
 
 ship.add(flameOuter);
 
-// ========================================
 // LLAMA INTERIOR
-// ========================================
+
 
 const flameCore = new THREE.Mesh(
     new THREE.ConeGeometry(
@@ -319,9 +296,7 @@ flameCore.position.z = 1.82;
 
 ship.add(flameCore);
 
-// ========================================
 // LUZ DEL ESCAPE
-// ========================================
 
 const exhaustLight = new THREE.PointLight(
     0xff6a1a,
@@ -338,9 +313,7 @@ exhaustLight.position.set(
 
 ship.add(exhaustLight);
 
-// ========================================
 // ANIMACIÓN DEL ESCAPE
-// ========================================
 
 function updateExhaust(time) {
 
@@ -375,9 +348,7 @@ ship.position.set(
 
 scene.add(ship);
 
-// ========================================
 // SUELO
-// ========================================
 
 const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(
@@ -395,9 +366,8 @@ floor.position.y = 0;
 
 scene.add(floor);
 
-// ========================================
 // ZONA CENTRAL
-// ========================================
+
 
 const road = new THREE.Mesh(
     new THREE.PlaneGeometry(
@@ -415,9 +385,7 @@ road.position.y = 0.01;
 
 scene.add(road);
 
-// ========================================
 // MUNDO INFINITO
-// ========================================
 
 const segments = [];
 
@@ -440,9 +408,7 @@ function createSegment(z) {
     segments.push(segment);
 }
 
-// ========================================
 // EDIFICIOS
-// ========================================
 
 function createBuildings(segment) {
 
@@ -490,9 +456,8 @@ function createBuildings(segment) {
     }
 }
 
-// ========================================
+
 // OBSTÁCULOS
-// ========================================
 
 function createObstacles(segment) {
 
@@ -569,9 +534,7 @@ function createObstacles(segment) {
     }
 }
 
-// ========================================
 // MONEDAS
-// ========================================
 
 const coinMaterial =
     new THREE.MeshStandardMaterial({
@@ -638,9 +601,8 @@ function createCoins(segment) {
     }
 }
 
-// ========================================
-// ⭐ ESTRELLAS 3D
-// ========================================
+// ESTRELLAS 3D
+
 
 const starMaterial =
     new THREE.MeshStandardMaterial({
@@ -656,9 +618,7 @@ const starMaterial =
         roughness: 0.2
     });
 
-// ========================================
-// ✨ MATERIAL DEL NÚCLEO
-// ========================================
+// MATERIAL DEL NÚCLEO
 
 const coreMaterial =
     new THREE.MeshBasicMaterial({
@@ -675,9 +635,7 @@ const coreMaterial =
         depthWrite: false
     });
 
-// ========================================
 // GEOMETRÍA DE ESTRELLA 3D
-// ========================================
 
 function createStarGeometry() {
 
@@ -748,9 +706,7 @@ function createStarGeometry() {
     );
 }
 
-// ========================================
 // CREAR ESTRELLA
-// ========================================
 
 function createStars(segment) {
 
@@ -762,9 +718,7 @@ function createStars(segment) {
     const star =
         new THREE.Group();
 
-    // ====================================
-    // ⭐ ESTRELLA PRINCIPAL
-    // ====================================
+    // ESTRELLA PRINCIPAL
 
     const starMesh =
         new THREE.Mesh(
@@ -781,9 +735,7 @@ function createStars(segment) {
 
     star.add(starMesh);
 
-    // ====================================
-    // ✨ NÚCLEO BRILLANTE
-    // ====================================
+    // NÚCLEO BRILLANTE
 
     const core =
         new THREE.Mesh(
@@ -798,9 +750,7 @@ function createStars(segment) {
 
     star.add(core);
 
-    // ====================================
     // HALO DEL NÚCLEO
-    // ====================================
 
     const glow =
         new THREE.Mesh(
@@ -828,9 +778,7 @@ function createStars(segment) {
 
     star.add(glow);
 
-    // ====================================
     // POSICIÓN
-    // ====================================
 
     star.position.set(
 
@@ -847,27 +795,19 @@ function createStars(segment) {
         (SEGMENT_LENGTH - 8)
     );
 
-    // ====================================
     // DATOS
-    // ====================================
 
     star.userData.isStar = true;
 
     star.userData.core = core;
 
     star.userData.glow = glow;
-
-    // ====================================
-    // IMPORTANTE:
     // La estrella pertenece al segmento
-    // ====================================
 
     segment.add(star);
 }
 
-// ========================================
 // CREAR SEGMENTOS INICIALES
-// ========================================
 
 for (
     let i = 0;
@@ -880,9 +820,7 @@ for (
     );
 }
 
-// ========================================
 // CONTROLES
-// ========================================
 
 window.addEventListener(
     'keydown',
@@ -934,9 +872,7 @@ window.addEventListener(
     }
 );
 
-// ========================================
 // COLISIONES
-// ========================================
 
 const shipBox =
     new THREE.Box3();
@@ -950,9 +886,7 @@ const coinBox =
 const starBox =
     new THREE.Box3();
 
-// ========================================
 // ACTUALIZAR CONTADOR
-// ========================================
 
 function updateCoinCounter() {
 
@@ -967,9 +901,7 @@ function updateCoinCounter() {
         totalCoins;
 }
 
-// ========================================
 // GUARDAR MONEDAS
-// ========================================
 
 function bankCollectedCoins() {
 
@@ -992,9 +924,7 @@ function bankCollectedCoins() {
     updateCoinCounter();
 }
 
-// ========================================
 // COMPROBAR COLISIONES
-// ========================================
 
 function checkCollisions() {
 
@@ -1010,9 +940,8 @@ function checkCollisions() {
             const object of segment.children
         ) {
 
-            // ====================================
             // MONEDA
-            // ====================================
+      
 
             if (
                 object.userData.isCoin
@@ -1040,9 +969,7 @@ function checkCollisions() {
                 continue;
             }
 
-            // ====================================
             // ESTRELLA
-            // ====================================
 
             if (
                 object.userData.isStar
@@ -1074,9 +1001,8 @@ function checkCollisions() {
                 continue;
             }
 
-            // ====================================
             // OBSTÁCULO
-            // ====================================
+        
 
             if (
                 !object.userData.isObstacle
@@ -1102,9 +1028,7 @@ function checkCollisions() {
     }
 }
 
-// ========================================
 // GAME OVER
-// ========================================
 
 function endGame() {
 
@@ -1132,9 +1056,7 @@ function endGame() {
     ).classList.add('hidden');
 }
 
-// ========================================
 // RESTART
-// ========================================
 
 document.getElementById(
     'restart'
@@ -1184,9 +1106,8 @@ document.getElementById(
     }
 );
 
-// ========================================
 // BOTÓN PLAY
-// ========================================
+
 
 document.getElementById(
     'play-btn'
@@ -1232,9 +1153,7 @@ document.getElementById(
     }
 );
 
-// ========================================
 // ACTUALIZAR JUEGO
-// ========================================
 
 function updateGame(delta) {
 
@@ -1242,9 +1161,8 @@ function updateGame(delta) {
         return;
     }
 
-    // ====================================
     // MOVIMIENTO LATERAL
-    // ====================================
+
 
     const lateralSpeed =
         10 * delta;
@@ -1271,9 +1189,7 @@ function updateGame(delta) {
     ship.position.x =
         playerX;
 
-    // ====================================
     // INCLINACIÓN
-    // ====================================
 
     const targetRotation =
         keys.left
@@ -1288,9 +1204,8 @@ function updateGame(delta) {
             ship.rotation.z
         ) * 0.12;
 
-    // ====================================
     // VELOCIDAD
-    // ====================================
+  
 
     speed =
         Math.min(
@@ -1324,9 +1239,9 @@ function updateGame(delta) {
         60 *
         delta;
 
-    // ====================================
+  
     // MOVER SEGMENTOS
-    // ====================================
+   
 
     for (
         const segment of segments
@@ -1336,9 +1251,8 @@ function updateGame(delta) {
             movement;
     }
 
-    // ====================================
     // RECICLAR SEGMENTOS
-    // ====================================
+  
 
     for (
         const segment of segments
@@ -1388,9 +1302,8 @@ function updateGame(delta) {
         }
     }
 
-    // ====================================
     // DISTANCIA
-    // ====================================
+
 
     distance +=
         movement * 0.1;
@@ -1409,16 +1322,13 @@ function updateGame(delta) {
     ).textContent =
         Math.floor(distance);
 
-    // ====================================
     // COLISIONES
-    // ====================================
 
     checkCollisions();
 }
 
-// ========================================
 // CÁMARA
-// ========================================
+
 
 function updateCamera() {
 
@@ -1442,10 +1352,8 @@ function updateCamera() {
     );
 }
 
-// ========================================
-// ANIMACIÓN
-// ========================================
 
+// ANIMACIÓN
 function animate() {
 
     requestAnimationFrame(
@@ -1458,9 +1366,8 @@ function animate() {
             0.05
         );
 
-    // ====================================
     // MENÚ
-    // ====================================
+
 
     if (
         gameState === 'menu'
@@ -1494,9 +1401,7 @@ function animate() {
         ).classList.add('hidden');
     }
 
-    // ====================================
     // JUGANDO
-    // ====================================
 
     else if (
         gameState === 'playing'
@@ -1510,9 +1415,7 @@ function animate() {
             clock.elapsedTime
         );
 
-        // ==================================
         // ANIMAR MONEDAS Y ESTRELLAS
-        // ==================================
 
         for (
             const segment of segments
@@ -1522,9 +1425,8 @@ function animate() {
                 const object of segment.children
             ) {
 
-                // --------------------------
+            
                 // MONEDAS
-                // --------------------------
 
                 if (
                     object.userData.isCoin
@@ -1537,9 +1439,9 @@ function animate() {
                         delta * 1.5;
                 }
 
-                // --------------------------
-                // ⭐ ESTRELLAS
-                // --------------------------
+        
+                // ESTRELLAS
+            
 
                 if (
                     object.userData.isStar
@@ -1552,9 +1454,9 @@ function animate() {
                     object.rotation.z +=
                         delta * 1.2;
 
-                    // ----------------------
-                    // ✨ PULSO DEL NÚCLEO
-                    // ----------------------
+        
+                    // PULSO DEL NÚCLEO
+                 
 
                     const pulse =
                         1 +
@@ -1568,9 +1470,8 @@ function animate() {
                             pulse
                         );
 
-                    // ----------------------
-                    // ✨ PULSO DEL HALO
-                    // ----------------------
+                    //PULSO DEL HALO
+              
 
                     const glowPulse =
                         1 +
@@ -1600,9 +1501,9 @@ function animate() {
         ).classList.add('hidden');
     }
 
-    // ====================================
+
     // GAME OVER
-    // ====================================
+   
 
     else if (
         gameState === 'gameover'
@@ -1621,9 +1522,9 @@ function animate() {
         ).classList.remove('hidden');
     }
 
-    // ====================================
+
     // RENDER
-    // ====================================
+
 
     renderer.render(
         scene,
@@ -1633,9 +1534,9 @@ function animate() {
 
 animate();
 
-// ========================================
+
 // RESIZE
-// ========================================
+
 
 window.addEventListener(
     'resize',
