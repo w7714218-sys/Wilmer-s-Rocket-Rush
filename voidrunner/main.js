@@ -10,16 +10,48 @@ const canvas = document.getElementById('game-canvas');
 
 const scene = new THREE.Scene();
 
-scene.background = new THREE.Color(0xd8d8d8);
+scene.background = new THREE.Color(0x02040a);
 
 scene.fog = new THREE.Fog(
-    0xd8d8d8,
-    80,
-    300
+    0x02040a,
+    150,
+    500
 );
 
-// CÁMARA
+// Earth Background
 
+const textureLoader =
+    new THREE.TextureLoader();
+
+const earthTexture =
+    textureLoader.load(
+        './images/finalearth.png'
+    );
+const earthGeometry = 
+    new THREE.SphereGeometry(
+        70,
+        64
+        ,
+        64
+    
+);
+const earthMaterial =
+    new THREE.MeshBasicMaterial({
+        map: earthTexture 
+    });
+const earth = 
+    new THREE.Mesh(
+        earthGeometry,
+        earthMaterial
+    );
+earth.position.set(
+    0,
+    35,
+    -220
+);
+scene.add(earth);
+
+// CÁMARA
 
 const camera = new THREE.PerspectiveCamera(
     65,
@@ -88,6 +120,15 @@ let totalCoins = Number.parseInt(
 let energy = 75;
 let speedBoostTime = 5;
 let playerX = 0;
+
+ // VUELO
+
+let isflaying = false;
+let flightTime = 0;
+const FLIGHT_DURATION = 3;
+const normaShipY = 2;
+const flightShipY = 7;
+
 
 const keys = {
     left: false,
@@ -402,9 +443,118 @@ function createSegment(z) {
     createObstacles(segment);
     createCoins(segment);
     createStars(segment);
+    createFlightItem(segment);
+    
+    //Objeto de vuelo
+    function createFlightItem(segment) {
+        //Solo aparece en algunos segmentos
+        if (Math.random() > 0.30) {
+            return;
+        }
+
+        const flightItem = new THREE.Group();
+
+// NÚcleo 
+        const core = 
+            new THREE.Mesh(
+                new THREE.IcosahedronGeometry(
+                    0.35,
+                    2
+                ),
+                new THREE.MeshBasicMaterial({
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 1,
+                    blending:
+                    THREE.AdditiveBlending,
+                    depthWrite: false
+                })
+            );
+        flightItem.add(core);
+
+//ANILLO  
+        const ring =
+            new THREE.Mesh(
+                new THREE.TorusGeometry(
+                    0.55,
+                    0.08,
+                    12,
+                    32
+                ),
+                new THREE.MeshBasicMaterial({
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.9,
+                    blending:
+                        THREE.AdditiveBlending,
+                    depthWrite: false
+
+                })
+            );
+        ring.rotation.x = 
+            Math.PI / 2;
+
+        flightItem.add(ring);
+
+//HALO
+        const glow = new THREE.Mesh(
+            new THREE.SphereGeometry(
+                0.75,
+                20,
+                20
+            ),
+            new THREE.MeshBasicMaterial({
+                color: 0x00ffff,
+                transparent: true,
+                opacity: 0.12,
+                blending:
+                    THREE.AdditiveBlending,
+                    depthWrite: false
+            })
+        );
+        flightItem.add(glow);
+
+        //POSICIÓN
+        const positions = [
+            -6,
+            -3,
+            0,
+            6
+        ];
+        flightItem.position.set(
+            
+            positions[
+                Math.floor(
+                    Math.random() * 
+                    positions.length
+        )
+    ],
+    
+    2.4,
+
+    (Math.random() - 0.5) * 
+    (SEGMENT_LENGTH - 8)
+);
+
+segment.add(flightItem);
+        
+
+//DATOS
+    flightItem.userData.isFlyingItem =
+        true;
+
+    flightItem.userData.core =
+        core;
+
+    flightItem.userData.ring =
+        ring;
+    
+    flightItem.userData.glow =
+        glow;
+    
+    }
 
     scene.add(segment);
-
     segments.push(segment);
 }
 
@@ -886,6 +1036,9 @@ const coinBox =
 const starBox =
     new THREE.Box3();
 
+const flightItemBox =
+    new THREE.Box3();
+
 // ACTUALIZAR CONTADOR
 
 function updateCoinCounter() {
@@ -937,12 +1090,33 @@ function checkCollisions() {
     ) {
 
         for (
-            const object of segment.children
-        ) {
+            const object of segment.children) {
 
-            // MONEDA
-      
+            // Objeto de vuelo
 
+            if (
+                object.userData.isFlyingItem
+
+            ) {
+                flightItemBox.setFromObject(
+                    object
+                );
+                if (
+                    shipBox.intersectsBox(
+                        flightItemBox
+                    )
+                ){
+
+                    startFlight();
+
+                    segment.remove(
+                        object
+                    );
+                }
+
+                continue;
+            }
+            // MONEDAS
             if (
                 object.userData.isCoin
             ) {
@@ -1189,6 +1363,16 @@ function updateGame(delta) {
     ship.position.x =
         playerX;
 
+//ALTURA DE LA NAVE
+
+const targetY =
+        isflaying
+            ? flightShipY
+            : normaShipY;
+
+ship.position.y +=
+        (targetY - ship.position.y) * 0.08;
+
     // INCLINACIÓN
 
     const targetRotation =
@@ -1227,6 +1411,17 @@ function updateGame(delta) {
             speedBoostTime -
             delta
         );
+
+//TIEMPO DE VUELO
+
+if (isflaying) {
+    flightTime -= delta;
+
+    if (flightTime <= 0){
+        flightTime = 0;
+        isflaying = false;
+    }
+}
 
     const boostMultiplier =
         speedBoostTime > 0
@@ -1322,9 +1517,19 @@ function updateGame(delta) {
     ).textContent =
         Math.floor(distance);
 
-    // COLISIONES
-
+// COLISIONES
     checkCollisions();
+}
+
+// ACTIVAR VUELO
+
+function startFlight() {
+    if (isflaying) {
+        return;
+    }
+
+    isflaying = true;
+    flightTime = FLIGHT_DURATION;
 }
 
 // CÁMARA
@@ -1424,7 +1629,35 @@ function animate() {
             for (
                 const object of segment.children
             ) {
-
+                
+                //OBJETO DE VUELO
+                
+                if (
+                    object.userData.isFlyingItem
+                ){
+                    object.userData.ring.rotation.z +=
+                        delta * 4;
+                    object.userData.ring.rotation.y +=
+                        delta * 2;
+                    const pulse =
+                        1 + Math.sin(
+                            clock.elapsedTime * 8
+                        ) * 0.15;
+                    object.userData.core
+                        .scale
+                        .setScalar(
+                            pulse
+                        );
+                    const glowPulse =
+                        1 + Math.sin(
+                            clock.elapsedTime * 6
+                        ) * 0.20;
+                    object.userData.glow
+                        .scale
+                        .setScalar(
+                            glowPulse
+                    );
+                }
             
                 // MONEDAS
 
